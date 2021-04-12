@@ -18,6 +18,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: "azure/caf-terraform-landingzones-starter"
+      - name: azure cli login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: run test for gitlab
         run: |
           RANDOM=$(cat /dev/urandom | tr -dc "a-z" | fold -w 8 | head -n 1)
