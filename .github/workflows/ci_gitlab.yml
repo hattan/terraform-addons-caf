@@ -41,6 +41,7 @@ jobs:
           # deploy launchpad
           rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
 
+          # deploy gitlab
           rover -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a apply
 
           # call rover delete
