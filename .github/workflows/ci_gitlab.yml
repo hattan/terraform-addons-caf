@@ -9,3 +9,5 @@ jobs:
   ci:
     runs-on: [ubuntu-latest]
     steps:
+      - name: checkout to repo
+        uses: actions/checkout@v2
