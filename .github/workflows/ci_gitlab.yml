@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: checkout to repo
         uses: actions/checkout@v2
+      - name: checkout starter configuration
+        uses: actions/checkout@v2
+        with:
+          repository: "azure/caf-terraform-landingzones-starter"
       - name: run test for gitlab
         run: |
           RANDOM=$(cat /dev/urandom | tr -dc "a-z" | fold -w 8 | head -n 1)
