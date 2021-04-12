@@ -35,6 +35,7 @@ jobs:
 
           SUBSCRIPTION_ID=$(echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r "subscription_id")
 
+          # login rover cli
           rover login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
 
           rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
