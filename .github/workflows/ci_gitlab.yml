@@ -1,1 +1,5 @@
 name: ci_gitlab
+
+on:
+  push:
+    branches: master
