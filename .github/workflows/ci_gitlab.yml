@@ -3,6 +3,9 @@ name: ci_gitlab
 on:
   push:
     branches: master
+    paths:
+    - "examples/gitlab/**"
+    - "modules/gitlab/**"
   workflow_dispatch:
 
 jobs:
