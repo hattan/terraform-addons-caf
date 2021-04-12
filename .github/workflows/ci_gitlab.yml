@@ -25,6 +25,7 @@ jobs:
       - name: run test for gitlab
         run: |
           RANDOM=$(cat /dev/urandom | tr -dc "a-z" | fold -w 8 | head -n 1)
+
           export environment="ci_${RANDOM}"
 
           export GITLAB_TOKEN=${{ secrets.GITLAB_TOKEN }}
@@ -46,3 +47,6 @@ jobs:
 
           # destroy gitlab
           rover -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a destroy
+
+          # destroy launchpad
+          rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
