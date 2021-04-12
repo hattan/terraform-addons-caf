@@ -3,3 +3,4 @@ name: ci_gitlab
 on:
   push:
     branches: master
+  workflow_dispatch:
