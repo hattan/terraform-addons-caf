@@ -35,7 +35,7 @@ jobs:
 
           TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
-          SUBSCRIPTION_ID=$(echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r "subscription_id")
+          echo "Tenant Id is '${TENANT_ID}'"
 
           # login rover cli
           rover login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
