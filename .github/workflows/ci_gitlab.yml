@@ -31,7 +31,7 @@ jobs:
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
 
-          export GITLAB_BASE_URL=${{ secrets.GITLAB_BASE_URL }}
+          echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           TENANT_ID=$(echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r "tenant_id")
 
