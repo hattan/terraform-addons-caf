@@ -8,6 +8,11 @@ on:
     - "modules/gitlab/**"
   workflow_dispatch:
 
+env:
+  TF_CLI_ARGS: '-no-color'
+  TF_CLI_ARGS_destroy: '-auto-approve -refresh=false'
+  ROVER_RUNNER: true
+
 jobs:
   ci:
     runs-on: [ubuntu-latest]
