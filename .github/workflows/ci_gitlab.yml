@@ -27,7 +27,7 @@ jobs:
           git clone https://github.com/aztfmod/rover.git
           git clone https://github.com/azure/caf-terraform-landingzones-starter.git
 
-          export environment="ci_${RANDOM}"
+          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
 
           export GITLAB_TOKEN=${{ secrets.GITLAB_TOKEN }}
 
