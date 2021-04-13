@@ -29,48 +29,103 @@ jobs:
         with:
           repository: azure/caf-terraform-landingzones
           path: public
-          ref: 'patch.5.3.1'
 
       - uses: actions/checkout@v2
         with:
           repository: azure/caf-terraform-landingzones-starter
+          path: config
 
-      - name: azure cli login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Login azure
+        env:
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          CLIENT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientId")
+          CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
+          SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+          TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
-      - name: run the pipeline for gitlab module
+          az login --service-principal -u "${CLIENT_ID}" -p "${CLIENT_SECRET}" --tenant "${TENANT_ID}"
+
+          az account set -s "${SUBSCRIPTION_ID}"
+
+          echo "local user: $(whoami)"
+
+      - name: run the pipeline for provisioning launchpad
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
           GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
+          export ARM_CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
+          export ARM_CLIENT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientId")
+          export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+          export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
+
           ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
 
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
-          TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
-
-          echo "Tenant Id is '${TENANT_ID}'"
-
-          SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
-
-          echo "Subscription Id is '${SUBSCRIPTION_ID}'"
-
-          # login rover cli
-          /tf/rover/rover.sh login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
-
           # deploy launchpad
-          /tf/rover/rover.sh -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/caf_launchpad -launchpad -var-folder ${GITHUB_WORKSPACE}/config/configuration/demo/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
+
+      - name: run the pipeline for deploying gitlab module
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          export ARM_CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
+          export ARM_CLIENT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientId")
+          export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+          export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
+
+          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+
+          export environment="ci_${ENVIRONMENT_SUFFIX}"
+
+          echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # deploy gitlab
-          /tf/rover/rover.sh -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/modules/gitlab/ -var-folder ${GITHUB_WORKSPACE}/examples/gitlab/new_project  -level level1 -env ${environment} -a apply
+
+      - name: run the pipeline for destroying the gitlab module
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          export ARM_CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
+          export ARM_CLIENT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientId")
+          export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+          export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
+
+          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+
+          export environment="ci_${ENVIRONMENT_SUFFIX}"
+
+          echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # destroy gitlab
-          /tf/rover/rover.sh -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/modules/gitlab/ -var-folder ${GITHUB_WORKSPACE}/examples/gitlab/new_project  -level level1 -env ${environment} -a destroy
+
+      - name: run the pipeline for destroying launchpad
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          export ARM_CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
+          export ARM_CLIENT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientId")
+          export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+          export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
+
+          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+
+          export environment="ci_${ENVIRONMENT_SUFFIX}"
+
+          echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # destroy launchpad
-          /tf/rover/rover.sh -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/caf_launchpad -launchpad -var-folder ${GITHUB_WORKSPACE}/config/configuration/demo/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
