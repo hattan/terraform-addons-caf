@@ -1,9 +1,17 @@
-# Global settings
+# Map of the remote data state for lower level
+variable "lower_storage_account_name" {}
+variable "lower_container_name" {}
+variable "lower_resource_group_name" {}
+
+variable "tfstate_storage_account_name" {}
+variable "tfstate_container_name" {}
+variable "tfstate_key" {}
+variable "tfstate_resource_group_name" {}
+
+variable "tfstate_subscription_id" {}
+
 variable "global_settings" {
-  description = "Global settings object for the current deployment."
   default = {
-    passthrough    = false
-    random_length  = 4
     default_region = "region1"
     regions = {
       region1 = "southeastasia"
@@ -12,72 +20,82 @@ variable "global_settings" {
   }
 }
 
-variable "client_config" {
+variable "landingzone" {
+  default = {
+    backend_type        = "azurerm"
+    global_settings_key = "launchpad"
+    level               = "level0"
+    key                 = "examples"
+    tfstates = {
+      launchpad = {
+        level   = "lower"
+        tfstate = "caf_launchpad.tfstate"
+      }
+    }
+  }
+}
+
+variable "var_folder_path" {
   default = {}
 }
-
-variable "tenant_id" {
-  description = "Azure AD Tenant ID for the current deployment."
-  default     = null
-}
-
-variable "current_landingzone_key" {
-  description = "Key for the current landing zones where the deployment is executed. Used in the context of landing zone deployment."
-  default     = "local"
-  type        = string
-}
-
-variable "tfstates" {
-  description = "Terraform states configuration object. Used in the context of landing zone deployment."
-  default     = {}
-}
+variable "tenant_id" {}
 
 variable "environment" {
-  description = "Name of the CAF environment."
-  type        = string
-  default     = "sandpit"
+  default = "sandpit"
 }
-
+variable "rover_version" {
+  default = null
+}
 variable "logged_user_objectId" {
-  description = "Used to set access policies based on the value 'logged_in_user'. Can only be used in interactive execution with vscode."
-  default     = null
+  default = null
 }
 variable "logged_aad_app_objectId" {
-  description = "Used to set access policies based on the value 'logged_in_aad_app'"
-  default     = null
+  default = null
 }
-
-variable "use_msi" {
-  description = "Deployment using an MSI for authentication."
-  default     = false
-  type        = bool
-}
-
 variable "tags" {
-  description = "Tags to be used for this resource deployment."
-  type        = map(any)
-  default     = null
+  default = null
+  type    = map(any)
 }
-
+variable "app_service_environments" {
+  default = {}
+}
+variable "app_service_plans" {
+  default = {}
+}
+variable "app_services" {
+  default = {}
+}
+variable "diagnostics_definition" {
+  default = null
+}
 variable "resource_groups" {
-  description = "Resource groups configuration objects"
-  default     = {}
+  default = null
 }
-
-variable "subscriptions" {
+variable "storage_accounts" {
+  default = {}
+}
+variable "azuread_groups" {
+  default = {}
+}
+variable "azuread_roles" {
+  default = {}
+}
+variable "keyvaults" {
+  default = {}
+}
+variable "keyvault_access_policies" {
+  default = {}
+}
+variable "keyvault_certificate_issuers" {
+  default = {}
+}
+variable "keyvault_keys" {
+  default = {}
+}
+variable "keyvault_certificate_requests" {
   default = {}
 }
 
-variable "remote_objects" {
-  description = "Remote objects is used to allow the landing zone to retrieve remote tfstate objects and pass them to the caf module"
-  default     = {}
-}
-
-variable "user_type" {
-  description = "The rover set this value to user or serviceprincipal. It is used to handle Azure AD api consents."
-  default     = {}
-}
-
-variable gitlab_projects {
+variable "gitlab_projects" {
   default = {}
 }
