@@ -41,6 +41,8 @@ jobs:
 
           echo "Subscription Id is '${SUBSCRIPTION_ID}'"
 
+          alias rover="./rover/scripts/rover.sh"
+
           # login rover cli
           rover login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
 
