@@ -55,19 +55,17 @@ jobs:
 
           echo "Subscription Id is '${SUBSCRIPTION_ID}'"
 
-          alias rover="./rover/scripts/rover.sh"
-
           # login rover cli
-          rover login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
+          /tf/rover/rover.sh login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
 
           # deploy launchpad
-          rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
 
           # deploy gitlab
-          rover -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a apply
 
           # destroy gitlab
-          rover -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/gitlab/new_project/  -level level1 -env ${environment} -a destroy
 
           # destroy launchpad
-          rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
