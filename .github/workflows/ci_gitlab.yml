@@ -14,10 +14,6 @@ jobs:
     steps:
       - name: checkout to repo
         uses: actions/checkout@v2
-      - name: checkout starter configuration
-        uses: actions/checkout@v2
-        with:
-          repository: "azure/caf-terraform-landingzones-starter"
       - name: azure cli login
         uses: azure/login@v1
         with:
