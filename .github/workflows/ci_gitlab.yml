@@ -19,6 +19,12 @@ jobs:
     steps:
       - name: checkout to repo
         uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+        with:
+          repository: azure/caf-terraform-landingzones
+          path: public
+          ref: 'patch.5.3.1'
       - name: azure cli login
         uses: azure/login@v1
         with:
