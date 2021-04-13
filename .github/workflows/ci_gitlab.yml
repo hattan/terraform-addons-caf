@@ -38,6 +38,9 @@ jobs:
           echo "Tenant Id is '${TENANT_ID}'"
 
           SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+
+          echo "Subscription Id is '${SUBSCRIPTION_ID}'"
+
           # login rover cli
           rover login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
 
