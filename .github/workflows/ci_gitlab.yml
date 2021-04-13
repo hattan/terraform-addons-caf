@@ -25,10 +25,16 @@ jobs:
           repository: azure/caf-terraform-landingzones
           path: public
           ref: 'patch.5.3.1'
+
+      - uses: actions/checkout@v2
+        with:
+          repository: azure/caf-terraform-landingzones-starter
+
       - name: azure cli login
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: run the pipeline for gitlab module
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
