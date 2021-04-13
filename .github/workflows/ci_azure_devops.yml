@@ -1,0 +1,59 @@
+name: ci_azure_devops
+
+on:
+  push:
+    branches: master
+    paths:
+    - "examples/azure-devops/**"
+    - "modules/azure-devops/**"
+  workflow_dispatch:
+
+jobs:
+  ci:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: checkout to repo
+        uses: actions/checkout@v2
+      - name: azure cli login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: run the pipeline for azure_devops module
+        env:
+          AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
+          AZDO_ORG_SERVICE_URL: ${{ secrets.AZDO_ORG_SERVICE_URL }}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          git clone https://github.com/aztfmod/rover.git
+          git clone https://github.com/azure/caf-terraform-landingzones-starter.git
+
+          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+
+          export environment="ci_${ENVIRONMENT_SUFFIX}"
+
+          echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
+
+          TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
+
+          echo "Tenant Id is '${TENANT_ID}'"
+
+          SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
+
+          echo "Subscription Id is '${SUBSCRIPTION_ID}'"
+
+          alias rover="./rover/scripts/rover.sh"
+
+          # login rover cli
+          rover login -t "${TENANT_ID}" -s "${SUBSCRIPTION_ID}"
+
+          # deploy launchpad
+          rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a apply
+
+          # deploy azure-devops
+          rover -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/azure-devops/new_project/  -level level1 -env ${environment} -a apply
+
+          # destroy azure-devops
+          rover -lz /tf/modules/examples/ -var-folder /tf/modules/examples/devops/providers/azure-devops/new_project/  -level level1 -env ${environment} -a destroy
+
+          # destroy launchpad
+          rover -lz /tf/caf/public/landingzones/caf_launchpad -launchpad -var-folder /tf/caf/configuration/${environment}/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
