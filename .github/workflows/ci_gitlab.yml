@@ -24,7 +24,7 @@ jobs:
           GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
-          RANDOM=$(cat /dev/urandom | tr -dc "a-z" | fold -w 8 | head -n 1)
+          git clone https://github.com/aztfmod/rover.git
 
           export environment="ci_${RANDOM}"
 
