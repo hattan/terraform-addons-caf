@@ -33,7 +33,7 @@ jobs:
 
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
-          TENANT_ID=$(echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r "tenant_id")
+          TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
           SUBSCRIPTION_ID=$(echo "${{ secrets.AZURE_CREDENTIALS }}" | jq -r "subscription_id")
 
