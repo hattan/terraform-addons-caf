@@ -29,7 +29,7 @@ jobs:
 
           ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
 
-          export GITLAB_TOKEN=${{ secrets.GITLAB_TOKEN }}
+          export environment="ci_${ENVIRONMENT_SUFFIX}"
 
           export GITLAB_BASE_URL=${{ secrets.GITLAB_BASE_URL }}
 
