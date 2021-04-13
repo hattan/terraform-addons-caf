@@ -25,6 +25,7 @@ jobs:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
           git clone https://github.com/aztfmod/rover.git
+          git clone https://github.com/azure/caf-terraform-landingzones-starter.git
 
           export environment="ci_${RANDOM}"
 
