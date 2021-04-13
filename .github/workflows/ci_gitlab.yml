@@ -41,9 +41,6 @@ jobs:
           GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
-          git clone https://github.com/aztfmod/rover.git
-          git clone https://github.com/azure/caf-terraform-landingzones-starter.git
-
           ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
