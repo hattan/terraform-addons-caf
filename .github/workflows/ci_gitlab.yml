@@ -106,7 +106,7 @@ jobs:
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # destroy gitlab
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/modules/gitlab/ -var-folder ${GITHUB_WORKSPACE}/examples/gitlab/new_project  -level level1 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/gitlab/new_project  -level level1 -env ${environment} -a destroy
 
       - name: run the pipeline for destroying launchpad
         env:
