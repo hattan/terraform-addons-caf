@@ -16,6 +16,11 @@ env:
 jobs:
   ci:
     runs-on: [ubuntu-latest]
+
+    container:
+      image: aztfmod/rover:0.13.6-2104.0803
+      options: --user 0
+
     steps:
       - name: checkout to repo
         uses: actions/checkout@v2
