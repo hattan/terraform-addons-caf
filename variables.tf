@@ -81,3 +81,7 @@ variable "user_type" {
 variable gitlab_projects {
   default = {}
 }
+
+variable "azure_devops_projects" {
+  default = {}
+}
