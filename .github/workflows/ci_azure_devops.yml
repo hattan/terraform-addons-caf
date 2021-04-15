@@ -128,4 +128,4 @@ jobs:
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # destroy launchpad
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/caf_launchpad -launchpad -var-folder ${GITHUB_WORKSPACE}/config/configuration/demo/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/caf_launchpad -launchpad -var-folder ${GITHUB_WORKSPACE}/config/configuration/demo/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy -auto-approve
