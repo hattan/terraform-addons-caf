@@ -25,4 +25,12 @@
       "terminal.integrated.scrollback": 8000,
   },
 
+  // Uncomment the next line if you want start specific services in your Docker Compose config.
+  // "runServices": [],
+
+  // Uncomment this like if you want to keep your containers running after VS Code shuts down.
+  // "shutdownAction": "none",
+
+  // Uncomment the next line to run commands after the container is created.
+  "postCreateCommand": "cp -R /tmp/.ssh-localhost/* ~/.ssh && sudo chmod 600 ~/.ssh/* && pre-commit install && pre-commit autoupdate && sudo chown -R $(whoami) /tf/caf && git config --global core.editor vi",
 }
