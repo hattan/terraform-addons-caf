@@ -83,7 +83,7 @@ jobs:
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # deploy azure-devops
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/azure-devops/new_project  -level level1 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/azure-devops/new_project -level level1 -env ${environment} -a apply
 
       - name: run the pipeline for destroying azure devops module
         env:
