@@ -30,11 +30,6 @@ jobs:
           repository: azure/caf-terraform-landingzones
           path: public
 
-      - uses: actions/checkout@v2
-        with:
-          repository: azure/caf-terraform-landingzones-starter
-          path: config
-
       - name: Login azure
         env:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
