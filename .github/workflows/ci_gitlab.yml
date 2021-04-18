@@ -83,7 +83,7 @@ jobs:
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # deploy gitlab
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/gitlab/new_project  -level level1 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/gitlab/new_project -level level1 -env ${environment} -a apply
 
       - name: run the pipeline for destroying the gitlab module
         env:
