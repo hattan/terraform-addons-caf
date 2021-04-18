@@ -72,6 +72,8 @@ jobs:
         env:
           AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
           AZDO_ORG_SERVICE_URL: ${{ secrets.AZDO_ORG_SERVICE_URL }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
           export ARM_CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
@@ -92,6 +94,8 @@ jobs:
         env:
           AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
           AZDO_ORG_SERVICE_URL: ${{ secrets.AZDO_ORG_SERVICE_URL }}
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_BASE_URL: ${{ secrets.GITLAB_BASE_URL }}
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         run: |
           export ARM_CLIENT_SECRET=$(echo "${AZURE_CREDENTIALS}" | jq -r ".clientSecret")
@@ -106,7 +110,7 @@ jobs:
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # destroy azure-devops
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/azure-devops/new_project  -level level1 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/azure-devops/new_project  -level level1 -env ${environment} -a destroy -auto-approve
 
       - name: run the pipeline for destroying launchpad
         env:
@@ -124,4 +128,4 @@ jobs:
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # destroy launchpad
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/caf_launchpad -launchpad -var-folder ${GITHUB_WORKSPACE}/config/configuration/demo/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/public/caf_launchpad -launchpad -var-folder ${GITHUB_WORKSPACE}/config/configuration/demo/level0/launchpad -parallelism 30 -level level0 -env ${environment} -a destroy -auto-approve
