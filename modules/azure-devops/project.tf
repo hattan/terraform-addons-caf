@@ -1,3 +1,4 @@
+# added a comment
 resource "azuredevops_project" "project" {
   name               = var.project.name
   description        = lookup(var.project, "description", "")
