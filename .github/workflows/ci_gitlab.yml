@@ -2,8 +2,12 @@ name: ci_gitlab
 
 on:
   pull_request:
+    paths:
+      - .github/workflows/master-200.yaml
+      - 'modules/azure-devops/**'
+      - 'examples/azure-devops/**'
   push:
-    branches: master
+    branches: main
     paths:
     - "examples/gitlab/**"
     - "modules/gitlab/**"
