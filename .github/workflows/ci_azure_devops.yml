@@ -59,7 +59,7 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
           export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
-          ENVIRONMENT_SUFFIX==${{ github.run_id }}
+          ENVIRONMENT_SUFFIX=${{ github.run_id }}
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
 
