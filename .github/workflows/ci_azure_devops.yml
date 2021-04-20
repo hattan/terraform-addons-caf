@@ -81,14 +81,18 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
           export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
-          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+          ENVIRONMENT_SUFFIX=${{ github.run_id }}
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
 
           echo "Environment name is 'ci_${ENVIRONMENT_SUFFIX}'"
 
           # deploy azure-devops
-          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ -var-folder ${GITHUB_WORKSPACE}/examples/azure-devops/new_project -level level1 -env ${environment} -a apply
+          /tf/rover/rover.sh -lz ${GITHUB_WORKSPACE}/examples/ \
+            -var-folder ${GITHUB_WORKSPACE}/examples/azure-devops/new_project \
+            -level level1 \
+            -env ${environment} \
+            -a apply
 
       - name: run the pipeline for destroying azure devops module
         env:
@@ -103,7 +107,7 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
           export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
-          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+          ENVIRONMENT_SUFFIX=${{ github.run_id }}
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
 
@@ -121,7 +125,7 @@ jobs:
           export ARM_SUBSCRIPTION_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".subscriptionId")
           export ARM_TENANT_ID=$(echo "${AZURE_CREDENTIALS}" | jq -r ".tenantId")
 
-          ENVIRONMENT_SUFFIX=$(git rev-parse --short "$GITHUB_SHA")
+          ENVIRONMENT_SUFFIX=${{ github.run_id }}
 
           export environment="ci_${ENVIRONMENT_SUFFIX}"
 
